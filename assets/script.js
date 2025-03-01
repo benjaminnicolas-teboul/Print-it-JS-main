@@ -19,13 +19,17 @@ const slides = [
 "use strict";
 const bannerSection = document.getElementById('banner');
 let slideNumber = 0;
+
+const right_Arrow = document.querySelector(".arrow_right")
+const left_Arrow = document.querySelector(".arrow_left")
+
 const createElements = () => {
 	const nbItems = slides.length
 	let dotContent = '<ul class="dots">';
 	let bannerText = '<p>';
-	let bannerImg = `<img class="banner-img" src="./assets/images/slideshow/${slides[slideNumber].image}" alt="image">`;
+	let bannerImg = `<img class="banner-img">`;
 	for(let i=0 ;i<nbItems;i++){
-		 dotContent += `<li class="dot${i === 0 ? ' dot_selected' : ''}"></li>`;	
+		 dotContent += `<li data-id=${i} class="dot"></li>`;	
 	}
 	bannerText += slides[slideNumber].tagLine;
 	bannerText += '</p>';
@@ -35,29 +39,39 @@ const createElements = () => {
 	bannerSection.insertAdjacentHTML("beforeend", bannerText);
 }
 createElements();
-const bannerImg = bannerSection.querySelector('.banner-img');
-const bannerTxt = bannerSection.querySelector('p');
 
 const displaySlider = (slideNumber) => {
+	const bannerImg = bannerSection.querySelector('.banner-img');
+	const bannerTxt = bannerSection.querySelector('p');
+	const dots = bannerSection.querySelectorAll('.dots li');
 	bannerTxt.innerHTML = slides[slideNumber].tagLine;
 	bannerImg.src = `./assets/images/slideshow/${slides[slideNumber].image}`;
+	bannerImg.alt = `./assets/images/slideshow/${slides[slideNumber].tagLine}`;
+	dots.forEach((dot,index) => {
+		if(index === Number(slideNumber)){
+			dot.classList.add('dot_selected');
+		}
+		else{
+			dot.classList.remove('dot_selected'); 
+		}
+	});
 }
-
-
-const right_Arrow = document.querySelector(".arrow_right")
-const left_Arrow = document.querySelector(".arrow_left")
-
-right_Arrow.addEventListener("click", () => {
-    document.querySelector('.dot_selected').classList.remove('dot_selected');  
+displaySlider(slideNumber);
+right_Arrow.addEventListener("click", () => {    
     slideNumber = (slideNumber + 1) % slides.length;
-    document.querySelectorAll('.dot')[slideNumber].classList.add('dot_selected'); 
     displaySlider(slideNumber);
 });
 
   left_Arrow.addEventListener("click", () =>{
-	document.querySelector('.dot_selected').classList.remove('dot_selected');  
     slideNumber = (slideNumber - 1 + slides.length) % slides.length;
-    document.querySelectorAll('.dot')[slideNumber].classList.add('dot_selected'); 
     displaySlider(slideNumber);
 })
 
+const dots = bannerSection.querySelectorAll('.dots li')
+
+for (let dot of dots) {
+	dot.addEventListener('click',(event) => {
+		const slideId = event.target.dataset.id;
+		displaySlider(slideId);	
+	})
+}
