@@ -19,7 +19,6 @@ const slides = [
 "use strict";
 const bannerSection = document.getElementById('banner');
 let slideNumber = 0;
-
 const right_Arrow = document.querySelector(".arrow_right")
 const left_Arrow = document.querySelector(".arrow_left")
 
@@ -31,7 +30,6 @@ const createElements = () => {
 	for(let i=0 ;i<nbItems;i++){
 		 dotContent += `<li data-id=${i} class="dot"></li>`;	
 	}
-	bannerText += slides[slideNumber].tagLine;
 	bannerText += '</p>';
 	dotContent += "</ul>";
 	bannerSection.insertAdjacentHTML("beforeend", dotContent);
@@ -46,7 +44,7 @@ const displaySlider = (slideNumber) => {
 	const dots = bannerSection.querySelectorAll('.dots li');
 	bannerTxt.innerHTML = slides[slideNumber].tagLine;
 	bannerImg.src = `./assets/images/slideshow/${slides[slideNumber].image}`;
-	bannerImg.alt = `./assets/images/slideshow/${slides[slideNumber].tagLine}`;
+	bannerImg.alt = `${slides[slideNumber].tagLine}`;
 	dots.forEach((dot,index) => {
 		if(index === Number(slideNumber)){
 			dot.classList.add('dot_selected');
